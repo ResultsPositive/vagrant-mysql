@@ -21,20 +21,20 @@ node 'mysql01.ghostlab.net' {
   }
 
   ::mysql::db { 'oodb':
-	  user     => 'oouser',
-	  password => 'secretp',
-	  host     => '%',
+    user     => 'oouser',
+    password => 'secretp',
+    host     => '%',
   }
 
   class { '::mysql::server::backup':
-	  backupdir => '/backups',
-	  backupuser => 'oouser',
-		backuppassword => 'secretp',
-		backupcompress => 1,
-		backuprotate => 5,
-		backupdatabases => ['oodb'],
-		file_per_database => 1,
-		time => ['2', '10'],
+    backupdir => '/backups',
+    backupuser => 'oouser',
+    backuppassword => 'secretp',
+    backupcompress => 1,
+    backuprotate => 5,
+    backupdatabases => ['oodb'],
+    file_per_database => 1,
+    time => ['2', '10'],
   }
 
   firewall { '3360 accept MySQL Traffic':
