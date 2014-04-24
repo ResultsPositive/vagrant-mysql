@@ -20,20 +20,23 @@ node 'mysql01.ghostlab.net' {
     max_user_connections     => '0',
   }
 
-  mysql_grant { 'oouser@%/oodb.*':
-    ensure     => 'present',
-    options    => ['GRANT'],
-    privileges => ['ALL'],
-    table      => '*.*',
-    user       => 'oouser@%',
+  ::mysql::db { 'oodb':
+	  user     => 'oouser',
+	  password => 'secretp',
+	  host     => '%',
   }
 
-  mysql_database { 'oodb':
-    ensure  => 'present',
-    charset => 'utf8',
-    collate => 'utf8_swedish_ci',
+  class { '::mysql::server::backup':
+	  backupdir => '/backups',
+	  backupuser => 'oouser',
+		backuppassword => 'secretp',
+		backupcompress => 1,
+		backuprotate => 5,
+		backupdatabases => ['oodb'],
+		file_per_database => 1,
+		time => ['2', '10'],
   }
-  
+
   firewall { '3360 accept MySQL Traffic':
     proto   => 'tcp',
     port    => '3360',
