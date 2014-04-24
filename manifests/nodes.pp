@@ -11,14 +11,6 @@ node 'mysql01.ghostlab.net' {
     root_password    => 'strongpassword',
     override_options => { 'mysqld' => { 'max_connections' => '1024' } }
   }
- 
-  mysql_user { 'oouser@%':
-    ensure                   => 'present',
-    max_connections_per_hour => '0',
-    max_queries_per_hour     => '0',
-    max_updates_per_hour     => '0',
-    max_user_connections     => '0',
-  }
 
   ::mysql::db { 'oodb':
     user     => 'oouser',
