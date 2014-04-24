@@ -2,7 +2,7 @@ node default {}
 
 node 'mysql01.ghostlab.net' {
   class { '::base': }
-
+  class { '::epel': }
   package { ['nano', 'git', 'screen', 'vim-enhanced', 'rsync', 'bind-utils']:
     ensure => installed,
   }
