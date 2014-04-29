@@ -1,0 +1,51 @@
+{
+  "epel::epel_enabled": "1",
+  "mysql::server::remove_default_accounts": true,
+  "mysql::server::root_password": "changeme",
+  "mysql::server::old_root_password": "",
+  "mysql::server::override_options": {
+    "mysqld" : {
+      "bind-address" : "0.0.0.0"
+    }
+  },
+  "mysql::server::databases": {
+    "oodb": {
+      "ensure": "present",
+      "charset": "utf8"
+    }
+  },
+  "mysql::server::grants": {
+    "oouser@%/oodb": {
+      "ensure": "present",
+      "options": ["GRANT"],
+      "privileges": ["ALL"],
+      "table": "*.*",
+      "user": "oouser@%"
+    }
+  },
+  "mysql::server::users": {
+    "oouser@%": {
+      "ensure": "present",
+      "max_connections_per_hour": 0,
+      "max_queries_per_hour": 0,
+      "max_updates_per_hour": 0,
+      "max_user_connections": 0,
+      "password_hash": "*F3A2A51A9B0F2BE2468926B4132313728C250DBF"
+    }
+  },
+  "mysql::server::backup::backupdir": "/backups",
+  "mysql::server::backup::backupuser": "backupmaster",
+  "mysql::server::backup::backuppassword": "fooman",
+  "mysql::server::backup::ensure": 1,
+  "mysql::server::backup::backupdirowner": "root",
+  "mysql::server::backup::backupdirmode": "0700",
+  "mysql::server::backup::backuprotate": 5,
+  "mysql::server::backup::backupcomppress": 1,
+  "mysql::server::backup::files_per_database": 1,
+  "mysql::server::backup::time": ["2", "10"],
+  "mysql::server::backup::backupdatabases": [
+    "oodb"
+  ],
+  "redis::service_ensure": "running",
+  "mysql::client::bindings_enable": 1
+}

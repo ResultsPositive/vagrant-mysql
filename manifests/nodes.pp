@@ -3,35 +3,16 @@ node default {}
 node 'mysql01.ghostlab.net' {
   class { '::base': }
   class { '::epel': }
+
   package { ['nano', 'git', 'screen', 'vim-enhanced', 'rsync', 'bind-utils']:
     ensure => installed,
   }
 
-  class { '::mysql::server':
-    root_password    => 'strongpassword',
-    override_options => { 'mysqld' => { 'max_connections' => '1024' } }
-  }
+  class { '::mysql::server': }
 
-  ::mysql::db { 'oodb':
-    user     => 'oouser',
-    password => 'secretp',
-    host     => '%',
-  }
-
-  class { '::mysql::server::backup':
-    backupdir => '/backups',
-    backupuser => 'oouser',
-    backuppassword => 'secretp',
-    backupcompress => 1,
-    backuprotate => 5,
-    backupdatabases => ['oodb'],
-    file_per_database => 1,
-    time => ['2', '10'],
-  }
-
-  firewall { '3360 accept MySQL Traffic':
+  firewall { '3306 accept MySQL Traffic':
     proto   => 'tcp',
-    port    => '3360',
+    port    => '3306',
     action  => 'accept',
   }
 
